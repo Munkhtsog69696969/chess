@@ -200,62 +200,158 @@ function App() {
     }
 
     if(piece=="B-b" || piece=="B-w"){
-      if(x2>=x1 && y2>=y1){
-        let obs=0;
-        for(let x=x1;x<x2;x++){
-          if(pieces[y1+1][x+1]!="."){
-            obs=1;
-            break;
+      if(Math.abs(x1-x2)==Math.abs(y1-y2)){
+        if(x2>x1 && y2>y1){
+          let x=x1+1;
+          let y=y1+1;
+          let obs=0;
+          while(x2>x1){
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            x++;
+            y++;
           }
-          y1++;
+          if(obs==0){
+            return true;
+          }
         }
-        if(obs==0){
-          return true;
-        }
-      }
 
-      if(x2>=x1 && y1>=y2){
-        let obs=0;
-        for(let x=x1;x<x2;x++){
-          if(pieces[y1-1][x+1]!="."){
-            obs=1;
-            break;
+        if(x2>x1 && y1>y2){
+          let obs=0;
+          let x=x1+1;
+          let y=y1-1;
+          while(x2>x1){
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            x++;
+            y--;
           }
-          y1--;
+          if(obs==0){
+            return true;
+          }
         }
-        if(obs==0){
-          return true;
-        }
-      }
 
-      if(x1>=x2 && y2>=y1){
-        let obs=0;
-        for(let x=x1;x<x2;x--){
-          if(pieces[y1+1][x-1]!="."){
-            obs=1;
-            break;
-          }
-          y1++;
-        }
-        if(obs==0){
-          return true;
-        }
       }
+      // if(x2>x1 && y2>y1){
+      //   let obs=0;
+      //   let y=y1;
+      //   for(let x=x1;x<x2;x++){
+      //     if(pieces[y+1][x+1]!="."){
+      //       obs=1;
+      //       break;
+      //     }
+      //     y++;
+      //   }
+      //   if(obs==0){
+      //     return true;
+      //   }
+      // }
 
-      if(x1>=x2 && y1>=y2){
-        let obs=0;
-        for(let x=x1;x<x2;x--){
-          if(pieces[y1-1][x-1]!="."){
-            obs=1;
-            break;
-          }
-          y1--;
-        }
-        if(obs==0){
-          return true;
-        }
-      }
+      // if(x2>x1 && y1>y2){
+      //   let obs=0;
+      //   let y=y1;
+      //   for(let x=x1;x<x2;x++){
+      //     if(pieces[y-1][x+1]!="."){
+      //       obs=1;
+      //       break;
+      //     }
+      //     y--;
+      //   }
+      //   if(obs==0){
+      //     return true;
+      //   }
+      // }
+
+      // if(x1>x2 && y2>y1){
+      //   let obs=0;
+      //   let y=y1;
+      //   for(let x=x1;x<x2;x--){
+      //     if(pieces[y+1][x-1]!="."){
+      //       obs=1;
+      //       break;
+      //     }
+      //     y++;
+      //   }
+      //   if(obs==0){
+      //     return true;
+      //   }
+      // }
+
+      // if(x1>x2 && y1>y2){
+      //   let obs=0;
+      //   let y=y1;
+      //   for(let x=x1;x<x2;x--){
+      //     if(pieces[y-1][x-1]!="."){
+      //       obs=1;
+      //       break;
+      //     }
+      //     y--;
+      //   }
+      //   if(obs==0){
+      //     return true;
+      //   }
+      // }
+
     
+    }
+
+    if(piece=="Q-b"){
+      if(x1==x2 && y2>=y1){
+        let obs=0;
+        for(let y=y1+1;y<y2;y++){
+          if(pieces[y][x1]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(x1==x2 && y1>=y2){
+        let obs=0;
+        for(let y=y1-1;y>y2;y--){
+          if(pieces[y][x1]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(y1==y2 && x2>=x1){
+        let obs=0;
+        for(let x=x1+1;x<x2;x++){
+          if(pieces[y1][x]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(y1==y2 && x1>=x2){
+        let obs=0;
+        for(let x=x1-1;x>x2;x--){
+          if(pieces[y1][x]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
     }
 
   }
