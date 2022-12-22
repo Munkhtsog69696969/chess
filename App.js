@@ -23,10 +23,10 @@ function App() {
   const [pieces,setPieces]=useState([
     ["R-b","H-b","B-b","K-b","Q-b","B-b","H-b","R-b"],
     ["P-b","P-b","P-b","P-b","P-b","P-b","P-b","P-b"],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
-    ["","","","","","","",""],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
     ["P-w","P-w","P-w","P-w","P-w","P-w","P-w","P-w"],
     ["R-w","H-w","B-w","K-w","Q-w","B-w","H-w","R-w"]
   ]);
@@ -73,31 +73,263 @@ function App() {
 
   }
 
-  let [chosenCard,setChosenCard]=useState({x:-1,y:-1,piece:null});
 
-  console.log(chosenCard);
+  const [movePiece,setMovePiece]=useState([]);
 
-  window.addEventListener("keydown",function(event){
-    if(event.code=="Enter"){
-      if(chosenCard.x!=-1 && chosenCard.y!=-1){
-        setChosenCard(chosenCard.x=-1,chosenCard.y=-1);
+  const isBlack1=useRef(null);
+  const isBlack2=useRef(null);
+  const canEat=useRef(null);
+
+  const [chosenPiece,setChosenPiece]=useState({x:null,y:null});
+
+  function Eat(piece,x1,y1,x2,y2){
+    // console.log(piece,x1,y1,x2,y2)
+
+    // const enemyOrVoid=pieces[y2][x2];
+
+    // console.log(enemyOrVoid)
+
+    if(piece=="P-b"){
+      if(x1==x2 && y2==y1+1 && pieces[y1+1][x1]=="."){
+        return true;
+      }
+
+      if(x2==x1-1 && y2==y1+1 && pieces[y1+1][x1-1][2]=="w"){
+        return true;
+      }
+
+      if(x2==x1+1 && y2==y1+1 && pieces[y1+1][x1+1][2]=="w"){
+        return true;
       }
     }
-  })
 
+    if(piece=="P-w"){
+      if(x1==x2 && y2==y1-1 && pieces[y1-1][x1]=="."){
+        return true;
+      }
+
+      if(x2==x1-1 && y2==y1-1 && pieces[y1-1][x1-1][2]=="b"){
+        return true;
+      }
+
+      if(x2==x1+1 && y2==y1-1 && pieces[y1-1][x1+1][2]=="b"){
+        return true;
+      }
+    }
+
+    if(piece=="R-b" || piece=="R-w"){
+      if(x1==x2 && y2>=y1){
+        let obs=0;
+        for(let y=y1+1;y<y2;y++){
+          if(pieces[y][x1]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(x1==x2 && y1>=y2){
+        let obs=0;
+        for(let y=y1-1;y>y2;y--){
+          if(pieces[y][x1]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(y1==y2 && x2>=x1){
+        let obs=0;
+        for(let x=x1+1;x<x2;x++){
+          if(pieces[y1][x]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+      if(y1==y2 && x1>=x2){
+        let obs=0;
+        for(let x=x1-1;x>x2;x--){
+          if(pieces[y1][x]!="."){
+            obs=1;
+            break;
+          }
+        }
+        if(obs==0){
+          return true
+        }
+      }
+
+    }
+
+    if(piece=="H-b" || piece=="H-w"){
+      if(x2==x1-1 && y2==y1+2){
+        return true;
+      }
+      if(x2==x1+1 && y2==y1+2){
+        return true;
+      }
+      if(x2==x1-1 && y2==y1-2){
+        return true;
+      }
+      if(x2==x1+1 && y2==y1-2){
+        return true;
+      }
+      if(y2==y1-1 && x2==x1-2){
+        return true;
+      }
+      if(y2==y1+1 && x2==x1-2){
+        return true;
+      }
+      if(y2==y1-1 && x2==x1+2){
+        return true;
+      }
+      if(y2==y1+1 && x2==x1+2){
+        return true;
+      }
+    }
+
+    if(piece=="B-b" || piece=="B-w"){
+      if(x2>=x1 && y2>=y1){
+        let obs=0;
+        for(let x=x1;x<x2;x++){
+          if(pieces[y1+1][x+1]!="."){
+            obs=1;
+            break;
+          }
+          y1++;
+        }
+        if(obs==0){
+          return true;
+        }
+      }
+
+      if(x2>=x1 && y1>=y2){
+        let obs=0;
+        for(let x=x1;x<x2;x++){
+          if(pieces[y1-1][x+1]!="."){
+            obs=1;
+            break;
+          }
+          y1--;
+        }
+        if(obs==0){
+          return true;
+        }
+      }
+
+      if(x1>=x2 && y2>=y1){
+        let obs=0;
+        for(let x=x1;x<x2;x--){
+          if(pieces[y1+1][x-1]!="."){
+            obs=1;
+            break;
+          }
+          y1++;
+        }
+        if(obs==0){
+          return true;
+        }
+      }
+
+      if(x1>=x2 && y1>=y2){
+        let obs=0;
+        for(let x=x1;x<x2;x--){
+          if(pieces[y1-1][x-1]!="."){
+            obs=1;
+            break;
+          }
+          y1--;
+        }
+        if(obs==0){
+          return true;
+        }
+      }
+    
+    }
+
+  }
+  
   return (
     <div className='container'>
       {
         map.map((card,i)=>{
           return(
             card.map((block,j)=>{
-              let color;
+              let color
               if(block[3]=="b"){
                 color="black";
               }
               return(
-                <div className={(chosenCard.x==i && chosenCard.y==j) ? "card-chosen" : color=="black" ? "card-black" : "card-white"} key={block} onClick={()=>{
-                  setChosenCard(chosenCard={x:i,y:j,piece:pieces[i][j]})
+                <div className={(chosenPiece.x==j && chosenPiece.y==i) ? "card-chosen" : color=="black" ? "card-black" : "card-white"} key={block} onClick={()=>{
+                  if(movePiece.length==1){
+                    if(pieces[i][j][2]=="b"){
+                      isBlack2.current=1;
+                    }else{
+                      isBlack2.current=0;
+                    }
+
+                    if(isBlack1.current!=isBlack2.current){
+                      canEat.current=true;
+                    }else{
+                      canEat.current=false;
+                    }
+
+                    //section that makes pieces eat each other
+                    if(pieces[i][j]=="." || (canEat.current)){
+
+                      setPieces([...pieces]);
+
+                      const string=pieces[movePiece[0].y][movePiece[0].x];
+
+                      movePiece.push({x:j,y:i});
+
+                      if(Eat(string , movePiece[0].x , movePiece[0].y , movePiece[1].x , movePiece[1].y)){
+
+                        pieces[movePiece[0].y][movePiece[0].x]=".";
+  
+                        pieces[movePiece[1].y][movePiece[1].x]=string;
+
+                        setPieces([...pieces]);
+
+                      }
+
+                      setPieces([...pieces]);
+
+                    }
+                  }
+
+
+                  if(movePiece.length==0 && pieces[i][j]!="."){
+                    movePiece.push({x:j,y:i,piece:pieces[i][j]});
+
+                    if(pieces[i][j][2]=="b"){
+                      isBlack1.current=1;
+                    }else{
+                      isBlack1.current=0;
+                    }
+                  }
+
+
+                  if(movePiece.length==2){
+
+                    console.log(movePiece[0])
+
+                    movePiece.splice(0,2)
+
+                  }
+
+
                 }}>{pieceConvertor(pieces[i][j])}</div>
               )
             })
