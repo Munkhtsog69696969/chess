@@ -73,48 +73,126 @@ function App() {
 
   }
 
-
   const [movePiece,setMovePiece]=useState([]);
 
   const isBlack1=useRef(null);
   const isBlack2=useRef(null);
   const canEat=useRef(null);
 
-  const [chosenPiece,setChosenPiece]=useState({x:null,y:null});
 
   function Eat(piece,x1,y1,x2,y2){
-    // console.log(piece,x1,y1,x2,y2)
-
-    // const enemyOrVoid=pieces[y2][x2];
-
-    // console.log(enemyOrVoid)
 
     if(piece=="P-b"){
-      if(x1==x2 && y2==y1+1 && pieces[y1+1][x1]=="."){
-        return true;
+      if(x1==x2 && y2==y1+1){
+        if(pieces[y1+1][x1]=="."){
+          return true;
+        }else{
+          return false;
+        }
       }
 
-      if(x2==x1-1 && y2==y1+1 && pieces[y1+1][x1-1][2]=="w"){
-        return true;
+      if(x1==x2 && y2==y1+2){
+        if(pieces[y1+1][x1]=="."){
+          if(pieces[y1+2][x1]=="."){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
       }
 
-      if(x2==x1+1 && y2==y1+1 && pieces[y1+1][x1+1][2]=="w"){
-        return true;
+      if(x2==x1+1 && y2==y1+1){
+        if(pieces[y1+1][x1+1]!="."){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+      if(x2==x1-1 && y2==y1+1){
+        if(pieces[y1+1][x1-1]!="."){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+      if(x1==x2 && y2==y1-1){
+        return false;
+      }
+
+      if(x2==x1+1 && y2==y1-1){
+        return false;
+      }
+
+      if(x2==x1-1 && y2==y1-1){
+        return false;
+      }
+
+      if(x2==x1+1 && y1==y2){
+        return false;
+      }
+
+      if(x2==x1-1 && y1==y2){
+        return false;
       }
     }
 
     if(piece=="P-w"){
-      if(x1==x2 && y2==y1-1 && pieces[y1-1][x1]=="."){
-        return true;
+      if(x1==x2 && y2==y1+1){
+        return false;
+      }
+      if(x2==x1+1 && y2==y1+1){
+        return false;
+      }
+      if(x2==x1-1 && y2==y1+1){
+        return false;
+      }
+      if(x2==x1+1 && y1==y2){
+        return false;
+      }
+      if(x2==x1-1 && y1==y2){
+        return false;
       }
 
-      if(x2==x1-1 && y2==y1-1 && pieces[y1-1][x1-1][2]=="b"){
-        return true;
+      if(x1==x2 && y2==y1-1){
+        if(pieces[y1-1][x1]=="."){
+          return true;
+        }else{
+          return false;
+        }
       }
 
-      if(x2==x1+1 && y2==y1-1 && pieces[y1-1][x1+1][2]=="b"){
-        return true;
+      if(x1==x2 && y2==y1-2){
+        if(pieces[y1-1][x1]=="."){
+          if(pieces[y1-2][x1]=="."){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
       }
+
+      if(x2==x1+1 && y2==y1-1){
+        if(pieces[y1-1][x1+1]!="."){
+          return true;
+        }else{
+          return false
+        }
+      }
+
+      if(x2==x1-1 && y2==y1-1){
+        if(pieces[y1-1][x1-1]!="."){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
     }
 
     if(piece=="R-b" || piece=="R-w"){
@@ -197,20 +275,66 @@ function App() {
       if(y2==y1+1 && x2==x1+2){
         return true;
       }
+
+
+
+      if(x1==x2 && y1==y2+1){
+        return false;
+      }
+
+      if(x2==x1+1 && y1==y2+1){
+        return false;
+      }
+
+      if(x2==x1+1 && y1==y2){
+        return false;
+      }
+
+      if(x2==x1+1 && y2==y1+1){
+        return false;
+      }
+
+      if(x2==x1 && y2==y1+1){
+        return false;
+      }
+
+      if(x1==x2+1 && y2==y1+1){
+        return false;
+      }
+
+      if(x1==x2+1 && y1==y2){
+        return false;
+      }
+
+      if(x1==x2+1 && y1==y2+1){
+        return false;
+      }
     }
 
     if(piece=="B-b" || piece=="B-w"){
+      if(x1==x2 && y1==y2+1){
+        return false;
+      }
+      if(x2==x1+1 && y1==y2){
+        return false;
+      }
+      if(x1==x2 && y2==y1+1){
+        return false;
+      }
+      if(x1==x2+1 && y1==y2){
+        return false;
+      }
+
       if(Math.abs(x1-x2)==Math.abs(y1-y2)){
-        if(x2>x1 && y2>y1){
-          let x=x1+1;
-          let y=y1+1;
+        if(x2>=x1 && y2>=y1){
           let obs=0;
-          while(x2>x1){
+          let y=y1+1;
+          for(let x=x1+1;x<x2;x++){
+            // console.log(pieces[y][x]);
             if(pieces[y][x]!="."){
               obs=1;
               break;
             }
-            x++;
             y++;
           }
           if(obs==0){
@@ -218,16 +342,15 @@ function App() {
           }
         }
 
-        if(x2>x1 && y1>y2){
+        if(x2>=x1 && y1>=y2){
           let obs=0;
-          let x=x1+1;
           let y=y1-1;
-          while(x2>x1){
+          for(let x=x1+1;x<x2;x++){
+            // console.log(pieces[y][x]);
             if(pieces[y][x]!="."){
               obs=1;
               break;
             }
-            x++;
             y--;
           }
           if(obs==0){
@@ -235,71 +358,42 @@ function App() {
           }
         }
 
+        if(x1>=x2 && y2>=y1){
+          let obs=0;
+          let y=y1+1;
+          for(let x=x1-1;x>x2;x--){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y++;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
+
+        if(x1>=x2 && y1>=y2){
+          let obs=0;
+          let y=y1-1;
+          for(let x=x1-1;x>x2;x--){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y--;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
       }
-      // if(x2>x1 && y2>y1){
-      //   let obs=0;
-      //   let y=y1;
-      //   for(let x=x1;x<x2;x++){
-      //     if(pieces[y+1][x+1]!="."){
-      //       obs=1;
-      //       break;
-      //     }
-      //     y++;
-      //   }
-      //   if(obs==0){
-      //     return true;
-      //   }
-      // }
-
-      // if(x2>x1 && y1>y2){
-      //   let obs=0;
-      //   let y=y1;
-      //   for(let x=x1;x<x2;x++){
-      //     if(pieces[y-1][x+1]!="."){
-      //       obs=1;
-      //       break;
-      //     }
-      //     y--;
-      //   }
-      //   if(obs==0){
-      //     return true;
-      //   }
-      // }
-
-      // if(x1>x2 && y2>y1){
-      //   let obs=0;
-      //   let y=y1;
-      //   for(let x=x1;x<x2;x--){
-      //     if(pieces[y+1][x-1]!="."){
-      //       obs=1;
-      //       break;
-      //     }
-      //     y++;
-      //   }
-      //   if(obs==0){
-      //     return true;
-      //   }
-      // }
-
-      // if(x1>x2 && y1>y2){
-      //   let obs=0;
-      //   let y=y1;
-      //   for(let x=x1;x<x2;x--){
-      //     if(pieces[y-1][x-1]!="."){
-      //       obs=1;
-      //       break;
-      //     }
-      //     y--;
-      //   }
-      //   if(obs==0){
-      //     return true;
-      //   }
-      // }
-
     
     }
 
-    if(piece=="Q-b"){
+    if(piece=="Q-b" || piece=="Q-w"){
       if(x1==x2 && y2>=y1){
         let obs=0;
         for(let y=y1+1;y<y2;y++){
@@ -352,6 +446,108 @@ function App() {
         }
       }
 
+      //bishop
+      if(Math.abs(x1-x2)==Math.abs(y1-y2)){
+        if(x2>=x1 && y2>=y1){
+          let obs=0;
+          let y=y1+1;
+          for(let x=x1+1;x<x2;x++){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y++;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
+
+        if(x2>=x1 && y1>=y2){
+          let obs=0;
+          let y=y1-1;
+          for(let x=x1+1;x<x2;x++){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y--;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
+
+        if(x1>=x2 && y2>=y1){
+          let obs=0;
+          let y=y1+1;
+          for(let x=x1-1;x>x2;x--){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y++;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
+
+        if(x1>=x2 && y1>=y2){
+          let obs=0;
+          let y=y1-1;
+          for(let x=x1-1;x>x2;x--){
+            // console.log(pieces[y][x]);
+            if(pieces[y][x]!="."){
+              obs=1;
+              break;
+            }
+            y--;
+          }
+          if(obs==0){
+            return true;
+          }
+        }
+      }
+
+    }
+
+    if(piece="K-b" || piece=="K-w"){
+      if(x1==x2 && y1==y2+1){
+        return true;
+      }
+
+      if(x2==x1+1 && y1==y2+1){
+        return true;
+      }
+
+      if(x2==x1+1 && y1==y2){
+        return true;
+      }
+
+      if(x2==x1+1 && y2==y1+1){
+        return true;
+      }
+
+      if(x2==x1 && y2==y1+1){
+        return true;
+      }
+
+      if(x1==x2+1 && y2==y1+1){
+        return true;
+      }
+
+      if(x1==x2+1 && y1==y2){
+        return true;
+      }
+
+      if(x1==x2+1 && y1==y2+1){
+        return true;
+      }
+
     }
 
   }
@@ -367,7 +563,7 @@ function App() {
                 color="black";
               }
               return(
-                <div className={(chosenPiece.x==j && chosenPiece.y==i) ? "card-chosen" : color=="black" ? "card-black" : "card-white"} key={block} onClick={()=>{
+                <div className={color=="black" ? "card-black" : "card-white"} key={block} onClick={()=>{
                   if(movePiece.length==1){
                     if(pieces[i][j][2]=="b"){
                       isBlack2.current=1;
@@ -405,7 +601,6 @@ function App() {
                     }
                   }
 
-
                   if(movePiece.length==0 && pieces[i][j]!="."){
                     movePiece.push({x:j,y:i,piece:pieces[i][j]});
 
@@ -416,16 +611,10 @@ function App() {
                     }
                   }
 
-
                   if(movePiece.length==2){
-
-                    console.log(movePiece[0])
-
+                    // console.log(movePiece[0])
                     movePiece.splice(0,2)
-
                   }
-
-
                 }}>{pieceConvertor(pieces[i][j])}</div>
               )
             })
